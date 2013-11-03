@@ -186,7 +186,7 @@ The abstract goes here.
 
 
 \section{Introduction}
-\IEEEPARstart{O}{nline} Social Networks \textit{OSNs} are increasingly being
+\IEEEPARstart{O}{nline} Social Networks (\textit{OSNs}) are increasingly being
 used to share sensitive data with a limited circle of online connections. Users
 therefore have to count on the privacy infrastructure of the social network
 itself. On social networks like Google Plus or Facebook this is realised by
@@ -239,7 +239,7 @@ those of random users B and C thereby making this process only reversable by
 friends who are allowed to see the profile of user A. However this can not be
 applied to messages or status updates that are frequently used on Facebook.
 
-\paragraph{FaceCloak} stores posted Facebook data on its servers in encrypted
+\paragraph{FaceCloak} stores published Facebook data on its servers in encrypted
 form and replaces the data on Facebook with random text fetched from Wikipedia.
 Although this could be a useful mechanism to prevent OSNs from blocking security
 aware users because they are scared to see their advertising revenues shrink, it
@@ -258,12 +258,36 @@ before he is able to interact in the privacy preserving architecture
 consequently requiring an infrastructure for broadcasting and storing public
 keys. Furthermore, to support the encryption of messages to friends of friends,
 user defined groups should be made available publicly thereby making the public
-key infrastructure even more complicated. Finally the proposed ABE encryption
-scheme is 100 to 1000 times slower than a standard RSA operation.
+key distribution system even more complicated. Finally the proposed ABE
+encryption scheme is 100 to 1000 times slower than a standard RSA operation.
 \cite{BadenPersona} 
 
-\paragraph{Scramble}
-
+\paragraph{Scramble} is a Firefox extension that allows defining groups of
+friends that are given access to certain social network updates. The tool uses
+public key encryption based on OpenPGP \cite{rfc4880} to broadcast encrypted
+messages on almost any platform. Furthermore Scramble provides the
+implementation of a tiny link server such that OSN policies not allowing to post
+encrypted data are bypassed. However, as indicated by usability studies
+\cite{WhittenJohnny} OpenPGP has a higher usage threshold because an average
+user does not mannage to understand OpenPGP properly. Additionally Scramble has
+to rely on the security decisions of the web of thrust. It therefore inherits
+the upleasant property of OpenPGP that the user can not be sure that the used
+PGP key actually belongs to the intended Facebook profile.\cite{BeatoScramble}\\
+\\
+The most unattractive property of all the above applications is that they have
+to rely on a rather complex infrastructure. Persona has to support an extended
+public key distribution system and Scramble relies on the leap-of-faith PGP web
+of thrust. Would it not be pleasant to use an infrastructure that inherently
+ensures that a Facebook update can only be read by the profiles the user
+inteded to? Would it not be a desirable approach that Facebook would require
+users to publish a public key on their Facebook profile such that communication
+with external providers is limited to a minimum? As the most important part of
+an OSNs revenues lies in the data analysis of their users, the chances of
+Facebook implementing a required public key option are rather low to
+unexisting. To circumvent the requirement of such a public key attribute, it
+would be user friendly if any unique public string could be used as a public
+key. This is where identity based cryptography comes in.\\
+\\
 \section{Identity Based Encryption}
 Shamir proposed a concept of identity-based cryptography in
 1984~\cite{DBLP:conf/crypto/Shamir84}. The basic idea behind identity-based
