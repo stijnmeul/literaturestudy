@@ -24,7 +24,8 @@
 % http://www.michaelshell.org/tex/testflow/
 
 
-%%*************************************************************************
+%%*************************************************************************
+
 %% Legal Notice:
 %% This code is offered as-is without any warranty either expressed or
 %% implied; without even the implied warranty of MERCHANTABILITY or
@@ -73,6 +74,11 @@
 \usepackage[none]{hyphenat}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{textcomp}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -162,7 +168,8 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-The abstract goes here.
+In this paper ways of realising user defined privacy in online social
+networks are studied based on identity-based encryption.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers
@@ -291,7 +298,7 @@ would be user friendly if any unique public string could be used as a public
 key. This is where identity based cryptography comes in.
 
 
-\section{Identity Based Encryption}
+\section{Identity Based Encryption}\label{sec:ibe}
 Shamir proposed a concept of identity-based cryptography in
 1984~\cite{DBLP:conf/crypto/Shamir84}. The basic idea behind identity-based
 cryptography is that any string can be a valid public key for encryption or
@@ -346,7 +353,7 @@ very undesirable because the party to thrust has just shifted from the social
 network to a third party PKG. Possible workarounds solving this issue are
 discussed in Section~\ref{sec:possible-workarounds}.
 
-\subsection{Pairings}
+\subsection{Pairings}\label{sec:pairings}
 Although Shamir easily constructed an \textit{identity-based signature (IBS)}
 scheme based on RSA in 1984, the use case of \textit{identity-based encryption
 (IBE)} remained an open problem for many years. It was by the introduction of
@@ -354,17 +361,147 @@ scheme based on RSA in 1984, the use case of \textit{identity-based encryption
 Franklin\cite{BonehFranklinIBE} were able to implement the first secure and
 truly practical IBE system~\cite{Baek04asurvey}.\\
 \\
+An IBE scheme can be built from any bilinear map $e : \mathds{G}_1 \times
+\mathds{G}_1 \rightarrow \mathds{G}_2$ between two groups $\mathds{G}_1$ ,
+$\mathds{G}_2$ as long as a variant of the Computational Diffie-Hellman problem
+in $\mathds{G}_1$ is hard. Where $\mathds{G}_1$ and $\mathds{G}_2$ are two
+groups of order $q$ for some large prime $q$. The bilinear map should satisfy
+the following properties:
 
+\begin{enumerate}
+ \item Bilinear: A map $\hat{e}: \mathds{G}_1 \times \mathds{G}_1 \rightarrow
+\mathds{G}_2$ is \textit{bilinear} if $\hat{e} \left(aP,bQ \right) = \hat{e}
+\left( P,Q\right)^{ab}$ for all $P,Q \in \mathds{G}_1$
+ \item Non degenerate: The map does not send all pairs in $e : \mathds{G}_1
+\times \mathds{G}_1$ to the identity in $\mathds{G}_2$  such that if $P$ is a
+generator of $\mathds{G}_1$ then $\hat{e}\left(P,P\right)$ is a generator of
+$\mathds{G}_2$.
+ \item Computable: There exists an efficient algorithm to compute
+$\hat{e}\left(P,Q\right)$ for any $P,Q \in \mathds{G}_1$
+\end{enumerate}
+
+A bilinear map satisfying the above properties is called an \textit{admissible}
+bilinear map. In other words it can be stated that an admissible bilinear map
+is a function pairing elements from one cyclic group to another of the same
+prime order, where the discrete log problem is hard in the first
+group~\cite{YoungbloodIntroduction}. The group $\mathds{G}_1$ is a subgroup of
+the additive group of points on an elliptic curve $E\textfractionsolidus
+\mathds{F_{p}}$. The group $\mathds{G}_2$ is a subgroup of the multiplicative
+group of points of a finite field $\mathds{F}_{p^{2}}^{*}$. Consequently
+$\mathds{G}_1$ can be seen as an additive group and $\mathds{G}_2$ as a
+multiplicative group.~\cite{BonehFranklinIBE}\\
+\\
+The security of IBE is based on the \textit{Bilinear Diffie-Hellman
+Assumption (BDH assumption)}. This assumption states that given:
+\begin{itemize}
+ \item $\mathds{G}_1$ and $\mathds{G}_2$ groups of prime order $q$
+ \item $\hat{e}: \mathds{G}_1 \times \mathds{G}_1 \rightarrow \mathds{G}_2$ an
+admissible bilinear map
+ \item $P$ a generator of $\mathds{G}_1$
+ \item $\langle P, aP, bP, cP \rangle$ for some ungiven $a, b, c \in
+\mathds{Z}_{q}^{*}$
+\end{itemize}
+it is computationally hard to calculate $W = \hat{e} \left( P , P \right)^{abc}$
+although calculating $\langle P, aP, bP, cP \rangle$ for some $a, b, c \in
+\mathds{Z}_{q}^{*}$ and  $W = \hat{e} \left( P , P \right)^{abc}$ is fairly
+easy once $a, b$ and $c$ are known~\cite{BonehFranklinIBE}. The admissible
+pairing thus functions as a one-way function as it can be shown that solving the
+BDH assumption is reducible to solving the discrete-log problem for these
+bilinear maps~\cite{YoungbloodIntroduction}.\\
+\\
+Both modified Weil and Tate pairings suffice the required properties for
+admissable bilinear maps and are used in practice. Tate pairings however have
+the advantage of being computationally more efficient then Weil
+pairings~\cite{YacovBilinear}.\\
+\\
+Please further note that:
+\begin{equation} \label{eq:sym}
+ \hat{e} \left( aX, bY\right) = \hat{e} \left( X, Y\right)^{ab} = \hat{e} \left(
+bX, aY\right)
+\end{equation}
+where $aX$ represents a multiplication of a point on an elliptic curve by
+integers. Although the multiplication operation $aX$ is easy, finding $a$ given
+$aX$ will be computationally infeasible~\cite{YoungbloodIntroduction}.
+
+\subsection{A Concrete IBE Scheme}
+Pairings as dicussed in Section~\ref{sec:pairings} allow to implement a
+concrete IBE scheme based on the following 4 steps:
+
+\begin{enumerate}
+ \item \textit{Setup}: the PKG picks an elliptic curve, a  random secret $s$ and
+a point $P$ on the curve. $P$ and $sP$ are made public such that $pk_{PKG}$ =
+$\langle P, sP\rangle$ in Figure~\ref{fig:ibe}.
+ \item \textit{Encryption}: As Alice knows $pk_{PKG}$ and $ID_{Bob}$, she can
+pick a random $r$ and calculate a key $k$ to encrypt her plaintext message $M$
+by $k = \hat{e} \left( r ID_{Bob}, pk_{PKG}\right)= \hat{e} \left( r ID_{Bob},
+sP \right)$. Alice then sends $\langle Encrypt_{k}\left( M \right), rP \rangle$
+to Bob.
+ \item \textit{Extract:} If Bob has never received a message before, he still
+needs to receive its private key from the PKG. Bob authenticates with the PKG
+after which the PKG calculates $sk_{Bob} = s ID_{Bob}$ and returns this to Bob
+over a secure channel.
+ \item \textit{Decryption:} Bob can now calculate the key $k$ to decrypt
+$\langle Encrypt_{k}\left( M \right)$ by $k = \hat{e} \left( s ID_{Bob}, rP
+\right)$.
+\end{enumerate}
+Note that the key $k$ calculated by Bob and the key $k$ calculated by Alice is
+the same because of the property illustrated in Formula~\ref{eq:sym}.
+Furthermore Bob and the PKG are the only ones able to decrypt $Encrypt_{k}\left(
+M \right)$ as nobody else knows $s ID_{Bob}$.
 
 \subsection{Advantages of IBE}
+As already discussed in Section~\ref{sec:ibe} one of the most attractive
+properties of IBE is the recipient that does not have to have taken any action
+before being able to start receiving messages. Certainly in an OSN this would
+be a compelling feature as the user does not have to upload its public key to a
+key ring neither to a public server. For the public key, the user's unique
+Facebook profile identifier could be used for example.  Once he signed up to
+Facebook, he then would be ready to start receiving secure messages from all
+his friends who know his identifier.\\
+\\
+Moreover, an IBE architecture reduces the complexity of the system as there is
+no further need for public key certificates. The user only has to receive his
+secret key once from the PKG over a secure channel. After he knows his private
+key, the user theoretically never has to contact the PKG again unless he loses
+it. The contrast with a CA hierarchy and security certificates being issued
+periodically is immense.\\
+\\
+Finally, IBE has less restrictions on scaling because PKGs can be distributed
+independently and geographically without the need to synchronise data. This
+property enables quick and easy key management across the
+world.~\cite{VoltageIBE}
 
-\subsection{Disadvantages of IBE}
+\subsection{Disadvantages of IBE}\label{sec:possible-workarounds}
+One of the major drawbacks of IBE is its inherent key escrow property. If one
+does not want to trust its data to a provider of an OSN, he probably does
+not want any other unintended third party to have access to this data either. A
+possible countermeasure for the above key escrow problem would be to use
+Shamir's secret sharing technique to distribute the PKG's master secret key
+$sk_{PKG}$ over a number of different PKGs~\cite{BonehFranklinIBE}. But as this
+method requires users to authenticate themselves to multiple PKGs, this
+workaround increases the total communication and computational cost of the
+system~\cite{Baek04asurvey}.
 
-\subsection{Possible Workarounds}\label{sec:possible-workarounds}
+Another disadvantage of IBE is that \textit{Certificate Revocation Lists} are
+no longer supported as there are no security certificates to revoke. At first
+sight this seems a good thing as supporting CRLs is cumbersome and puts heavy
+demands on the individual users of a PKI. However, this also implies that
+public keys can not be revoked in case their coresponding private keys are
+compromised. Such a scenario would imply that the user could no longer make use
+of certain strings that are immediately linked to his identity. To get around
+this issue a validity timestamp could be concatenated to the ID component
+thereby limiting the period during which a public key would be valid. By doing
+so restrictions would be placed on the duration the compromised
+secret key would be useful. Remark that such a workaround as well would imply a
+higher computational and communication cost as all users have to reconnect to
+the PKG asking for a new secret key every time their timestamp
+expires~\cite{YoungbloodIntroduction}.
 
 \section{Implementing IBE for Online Social Networks}
 
+\subsection{IBE Broadcasting}
 
+\subsection{}
 
 \section{Conclusion}
 The conclusion goes here.
