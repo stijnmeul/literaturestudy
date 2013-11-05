@@ -168,8 +168,9 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-In this paper ways of realising user defined privacy in online social
-networks are studied based on identity-based encryption.
+In this paper the possibilities of realising user defined privacy in online
+social networks (with Facebook in particular) based on identity-based
+encryption are explored.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers
@@ -194,21 +195,21 @@ networks are studied based on identity-based encryption.
 
 
 
-\section{Introduction}
+\section{Introduction} \label{sec:introduction}
 \IEEEPARstart{O}{nline} Social Networks (\textit{OSNs}) are increasingly being
 used to share sensitive data with a limited circle of online connections. Users
 therefore have to count on the privacy infrastructure of the social network
-itself. On social networks like Google Plus or Facebook this is realised by
-defining groups of connections who are allowed to see certain profile updates.
-At first sight the user seems protected from the general public as it does not
-have access to these shielded updates. The OSN itself however still has access
-to this data and gratefully uses it for comercial purposes like targeted
-advertising or behavior analysis. All this data forms the basis of the OSNs
-economical existence. As recent events have shown, this user data is not
-only used for the sake of the OSNs financial survival but the data is
- leaked to third parties and agencies like NSA as well. One can wonder if a
-company non-transparently passes this data to any government agency for the
-argument of security, what other purposes this data will be used for.\\
+itself. Social networks like Google Plus or Facebook realise these security
+settings by defining groups of connections who are allowed to see certain
+profile updates. At first sight the user seems protected from the general public
+as it does not have access to these shielded updates. The OSN itself however
+still has access to this data and gratefully uses it for comercial purposes like
+targeted advertising or behavior analysis. All this data forms the basis of the
+OSN's economical existence. As recent events have shown, this user data is not
+only used for the sake of the OSN's financial survival but the data is leaked to
+third parties and agencies like NSA as well. One can wonder if a company
+non-transparently passes this data to any government agency for the argument of
+security, what other purposes this data will be used for.\\
 \\
 Because the OSN has access to all users' data, it can be shared with external
 parties. This takes the users' full control over their data completely out of
@@ -229,7 +230,7 @@ allows to keep using OSN infrastructure without having to rely on the
 willingness of OSNs to keep the user's data private. The study is done with
 particularly Facebook in mind as this social network is amongst the most
 popular ones in the world. In the end the user should be able to define his
-own privacy instead of being dictated by the social network.
+own privacy instead of privacy policies being dictated by the social network.
 
 
 
@@ -244,17 +245,18 @@ key management and is therefore not secure against active attacks by Facebook
 itself.
 
 \paragraph{NOYB (None Of Your Business)} replaces the details of user A with
-those of random users B and C thereby making this process only reversable by
+those of random users B and C thereby making this process only reversible by
 friends who are allowed to see the profile of user A. However this can not be
-applied to messages or status updates that are frequently used on Facebook.
+applied to user messages or status updates that are the most frequently used
+features on Facebook.
 
 \paragraph{FaceCloak} stores published Facebook data on its servers in encrypted
 form and replaces the data on Facebook with random text fetched from Wikipedia.
-Although this could be a useful mechanism to prevent OSNs from blocking security
-aware users because they are scared to see their advertising revenues shrink, it
-has the disadvantage that other users could take this data to be genuine user
-content. Furthermore FaceCloaks architecture leads to an inefficient key
-distribution system.
+This could be a useful mechanism to prevent OSNs from blocking security
+aware users because they are scared to see their advertising revenues shrink.
+However, this approach has the disadvantage that other users could take this
+data to be genuine user content. Furthermore FaceCloaks architecture leads to an
+inefficient key distribution system.
 
 \paragraph{Persona} is a scheme that can be used as a Firefox extension to let
 users of an OSN determine their own privacy by supporting the ability to encrypt
@@ -278,7 +280,7 @@ messages on almost any platform. Furthermore Scramble provides the
 implementation of a tiny link server such that OSN policies not allowing to post
 encrypted data are bypassed. However, as indicated by usability studies
 \cite{WhittenJohnny} OpenPGP has a higher usage threshold because an average
-user does not mannage to understand OpenPGP properly. Additionally Scramble has
+user does not manage to understand OpenPGP properly. Additionally Scramble has
 to rely on the security decisions of the web of thrust. It therefore inherits
 the upleasant property of OpenPGP that the user can not be sure that the used
 PGP key actually belongs to the intended Facebook profile.\cite{BeatoScramble}\\
@@ -291,7 +293,7 @@ ensures that a Facebook update can only be read by the profiles the user
 inteded to? Would it not be a desirable approach that Facebook would require
 users to publish a public key on their Facebook profile such that communication
 with external providers is limited to a minimum? As the most important part of
-an OSNs revenues lies in the data analysis of their users, the chances of
+an OSNs' revenues lies in the data analysis of their users, the chances of
 Facebook implementing a required public key option are rather low to
 unexisting. To circumvent the requirement of such a public key attribute, it
 would be user friendly if any unique public string could be used as a public
@@ -402,7 +404,7 @@ admissible bilinear map
 \mathds{Z}_{q}^{*}$
 \end{itemize}
 it is computationally hard to calculate $W = \hat{e} \left( P , P \right)^{abc}$
-although calculating $\langle P, aP, bP, cP \rangle$ for some $a, b, c \in
+although calculating $\langle P, aP, bP, cP \rangle$ for some given $a, b, c \in
 \mathds{Z}_{q}^{*}$ and  $W = \hat{e} \left( P , P \right)^{abc}$ is fairly
 easy once $a, b$ and $c$ are known~\cite{BonehFranklinIBE}. The admissible
 pairing thus functions as a one-way function as it can be shown that solving the
@@ -450,54 +452,109 @@ Furthermore Bob and the PKG are the only ones able to decrypt $Encrypt_{k}\left(
 M \right)$ as nobody else knows $s ID_{Bob}$.
 
 \subsection{Advantages of IBE}
-As already discussed in Section~\ref{sec:ibe} one of the most attractive
+As already mentioned in Section~\ref{sec:ibe} one of the most attractive
 properties of IBE is the recipient that does not have to have taken any action
 before being able to start receiving messages. Certainly in an OSN this would
 be a compelling feature as the user does not have to upload its public key to a
-key ring neither to a public server. For the public key, the user's unique
-Facebook profile identifier could be used for example.  Once he signed up to
-Facebook, he then would be ready to start receiving secure messages from all
-his friends who know his identifier.\\
+key ring neither to a public server. For the public key, any string
+that uniquely identifies a user can be used. If a string is chosen that is
+inherently part of the OSN's architecture, the user does not have to perform
+actions that are incromprehensible to him. The ideal case is that once the
+user has signed up for the service of the OSN, he is ready to receive encrypted
+messages without taking any additional decisions concerning key lengths or
+algorithmic properties.\\
 \\
 Moreover, an IBE architecture reduces the complexity of the system as there is
 no further need for public key certificates. The user only has to receive his
 secret key once from the PKG over a secure channel. After he knows his private
 key, the user theoretically never has to contact the PKG again unless he loses
-it. The contrast with a CA hierarchy and security certificates being issued
-periodically is immense.\\
+his private key. The contrast in complexity with a CA hierarchy and security
+certificates being issued periodically is immense.\\
 \\
 Finally, IBE has less restrictions on scaling because PKGs can be distributed
 independently and geographically without the need to synchronise data. This
-property enables quick and easy key management across the
+property enables quick and easy key management all over the
 world.~\cite{VoltageIBE}
 
 \subsection{Disadvantages of IBE}\label{sec:possible-workarounds}
 One of the major drawbacks of IBE is its inherent key escrow property. If one
-does not want to trust its data to a provider of an OSN, he probably does
+does not want to trust his data to a provider of an OSN, he probably does
 not want any other unintended third party to have access to this data either. A
 possible countermeasure for the above key escrow problem would be to use
 Shamir's secret sharing technique to distribute the PKG's master secret key
 $sk_{PKG}$ over a number of different PKGs~\cite{BonehFranklinIBE}. But as this
 method requires users to authenticate themselves to multiple PKGs, this
 workaround increases the total communication and computational cost of the
-system~\cite{Baek04asurvey}.
-
-Another disadvantage of IBE is that \textit{Certificate Revocation Lists} are
-no longer supported as there are no security certificates to revoke. At first
-sight this seems a good thing as supporting CRLs is cumbersome and puts heavy
-demands on the individual users of a PKI. However, this also implies that
+system~\cite{Baek04asurvey}.\\
+\\
+Another disadvantage of IBE is that \textit{Certificate Revocation Lists (CRLs)}
+are no longer supported as there are no security certificates to revoke. At
+first sight this seems a good thing as supporting CRLs is cumbersome and puts
+heavy demands on the individual users of a PKI. However, this also implies that
 public keys can not be revoked in case their coresponding private keys are
 compromised. Such a scenario would imply that the user could no longer make use
 of certain strings that are immediately linked to his identity. To get around
 this issue a validity timestamp could be concatenated to the ID component
 thereby limiting the period during which a public key would be valid. By doing
-so restrictions would be placed on the duration the compromised
-secret key would be useful. Remark that such a workaround as well would imply a
-higher computational and communication cost as all users have to reconnect to
-the PKG asking for a new secret key every time their timestamp
-expires~\cite{YoungbloodIntroduction}.
+so, restrictions would be placed on the duration the compromised
+secret key. Remark that such a workaround would imply a
+higher computational and communication cost as well because all users have to
+reconnect over the secure channel to the PKG asking for a new secret key every
+time their timestamp expires~\cite{YoungbloodIntroduction}.
 
 \section{Implementing IBE for Online Social Networks}
+As Scrambe~\cite{BeatoScramble} already has a user friendly interface that
+supports all required actions to implement encryption on Online Social Networks,
+it would be useful to alter the existing Scramble code that it can implement
+IBE as well. The most important trigger to modify the existing Scamble code is
+because Scramble is open source, lightweight and developed at KU Leuven.
+Certainly the latter argument eases the process of altering the existing code
+and therefore is an asset.
+
+\subsection{User Public Key}
+The most important design decision is which profile attribute to use as a public
+key string of the user. The desired properties for such a user public key
+(denoted $ID_{Bob}$ in Figure~\ref{fig:ibe}) are the following:
+\begin{enumerate}
+ \item The public key should uniquely identify the user
+ \item The public key should be mandatory for every user of the social network
+ \item The public key should not change frequently over time
+ \item The public key should be an inherent part of the infrastructure of the
+social network thereby meaning that the previous three properties are already
+ensured by the provider of the social network.
+\end{enumerate}
+Please note that the decision of which string to use as a public key, is
+highly dependent on the targeted social network. Every OSN will namely have
+other profile attributes satisfying the earlier mentioned properties. Scramble
+would therefore become platform dependent. However, this is an offer the writers
+of this paper are willing to make for the sake of an increased ease of use.\\
+\\
+As already mentioned in Section~\ref{sec:introduction} the focus of this paper
+will be on Facebook although other OSNs could make use of the concepts
+mentioned in this paper. In Facebook there is a very obvious and readable
+string satisfying the earlier mentioned properties namely the Facebook
+username.\\
+\\
+A Facebook username is an unique identifier that serves as an URL of
+someone's profile. For example \texttt{http://www.facebook.com/user.name}
+refers to the Facebook profile of the user with Facebook username
+\texttt{user.name}.\\
+\\
+Using the username as an identifier ensures that all the above properties are
+satisfied as an URL can only refer to one page. Because every Facebook page is
+reachable using an URL, every user has such a username. Furthermore, the public
+key does not change frequently over time as Facebook limits changing this string
+only once~\cite{FacebookUsername}. Finally, Facebook has the responsibility to
+check all these properties as URL collisions would occur if they did not take
+care of this.\\
+\\
+Additional pleasant properties are that user names are:
+\begin{enumerate}
+ \item mostly closely related to the identity of the user. 
+ \item mostly readable as users choose them to make their profile easier to
+reach using an URL. This property also makes them easier to remember.
+\end{enumerate}
+
 
 \subsection{IBE Broadcasting}
 
