@@ -133,7 +133,8 @@
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
 % Do not put math or special symbols in the title.
-\title{Literature Study: Identity Based Encryption for Online Social Networks}
+\title{Literature Study: A survey on using Identity Based Encryption for Online
+Social Networks}
 %
 %
 % author names and IEEE memberships
@@ -170,7 +171,9 @@
 \begin{abstract}
 In this paper the possibilities of realising user defined privacy in online
 social networks (with Facebook in particular) based on identity-based
-encryption are explored.
+encryption and anonymous broadcast encryption are explored. The final goal is
+to propose a practical useable implementation of increased user defined privacy
+on Facebook.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers
@@ -225,16 +228,25 @@ demand for OSNs because of their wide range of useful applications. It would
 therefore still be meaningful to make use of the infrastructure of a Social
 Network without its inherent data leakage.\\
 \\
-The goal of this literature study is to research an elegant architecture that
-allows to keep using OSN infrastructure without having to rely on the
-willingness of OSNs to keep the user's data private. The study is done with
+The goal of this literature study is to research if an elegant architecture
+exists that allows to keep using OSN infrastructure without having to rely on
+the  willingness of OSNs to keep the user's data private. The study is done with
 particularly Facebook in mind as this social network is amongst the most
 popular ones in the world. In the end the user should be able to define his
-own privacy instead of privacy policies being dictated by the social network.
+own privacy instead of privacy policies being dictated by the social network.\\
+\\
+The structure of this paper is the following. First existing architectures
+achieving similar privacy goals on social networks are discussed in
+section~\ref{sec:existing-architectures}. Next an introduction to identity-based
+encryption is given in section~\ref{sec:ibe} and which appealing properties make
+IBE useful for increasing user defined privacy on Online Social Networks. In
+section~\ref{sec:implementing-IBE-for-OSNs} different forms of broadcasting
+schemes are considered for implementing IBE for Online Social Networks.
+Finally, in section~\ref{sec:conclusion} a conclusion is given.
 
 
-
-\section{Existing Architectures~\cite{BeatoScramble}}
+\section{Existing
+Architectures~\cite{BeatoScramble}}\label{sec:existing-architectures}
 Lots of fundamental work has been done on applications trying to enforce
 access control rules on OSNs. A grasp of all available applications is
 listed and analysed in the following section.
@@ -536,7 +548,8 @@ higher computational and communication cost as well because all users have to
 reconnect over the secure channel to the PKG asking for a new secret key every
 time their timestamp expires~\cite{YoungbloodIntroduction}.
 
-\section{Implementing IBE for Online Social Networks}
+\section{Implementing IBE for Online Social
+Networks}\label{sec:implementing-IBE-for-OSNs}
 As Scrambe~\cite{BeatoScramble} already has a user friendly interface that
 supports all required actions to implement encryption on Online Social Networks,
 it would be useful to alter the existing Scramble code that it can implement
@@ -605,7 +618,7 @@ can simply encrypt $M$ seperateley for each individual identity and then
 transmit these encrypted messages separately. If the cardinality of the set of
 targeted identities is $|S|$, then one has to perform $|S|$ independent
 encryptions. Of course such a solution would be too expensive in terms of
-bandwith requirement as well as pairing computation. Baek, Safavi-Naini and
+bandwidth requirement as well as pairing computation. Baek, Safavi-Naini and
 Susilo in~\cite{BaekIBEandBE} addressed this problem for the first time in
 literature. They call their protocol \textit{Multi Receiver Identity-Based
 Encryption (MR-IBE)} and base it on the Boneh-Franklin IBE using bilinear
@@ -645,16 +658,37 @@ message on a Social Network. If for example Bob's girlfriend celebrates her
 birthday in a few weeks and he spreads an encrypted message to all her friends
 without including her as a recipient, she will probably know Bob is up to
 something. This is just one example of possible many that illustrates the
-negative impact on security the broadcasting of $S$ can have in real life
+negative impact on security broadcasting of $S$ can have in real life
 situations. Depending on the context, information can be deduced about a
 status update without decrypting the update to plain text.\\
 \\
 Broadcast encryption schemes that do not leak information about the intended
 recipients are called \textit{Anonymous Broadcasting Encryption (ANOBE)}
 schemes.~\cite{LibertANOBE} As these systems do not profit from $S$ being known
-to every user upfront they are a lot less efficient than non-anonymous BE
+to every user upfront they are less efficient than non-anonymous BE
 schemes. Thus there clearly is a tradeoff between secrecy and efficiency in
-ID-based Broadcasting architectures.\\
+ID-based Broadcasting architectures although this tradeoff can be
+partially cancelled by letting the sender precompute certain
+parameters~\cite{FanANOMIBE}.\\
+\\
+Fan et al.~\cite{FanANOMIBE} are the first to consider the anonymity of the
+receivers in an ID-based broadcasting encryption architecture. They propose a
+protocol based on Lagrange interpolating polynomials such that anonymity is
+preserved for every receiver against any other receiver. All users of the
+system $U$ can analyse whether they are an intended receiver or not while only
+the sender knows who the other receivers in $S$ are. Wang et al. show
+in~\cite{WangCryptanalysis} that the original architecture as proposed
+in~\cite{FanANOMIBE} does not provide the level of anonymity as originally
+intended because everyone is able to deduce the set of authorised identities.
+In~\cite{WangCryptanalysis} protocol changes fixing these weaknesses are
+suggested and prove is given that the improved scheme satisfies the
+confidentiality and receiver anonymity under random oracle assumptions. Also
+Chien~\cite{ChienImproved} proposes similar improvements on the original
+architecture by Fan et al.~\cite{FanANOMIBE} Zhang et al.~\cite{ZhangComment}
+point out that the scheme of Wang et al. is not safe either as all authorised
+users in $S$ can deduce which other users are in $S$. In their paper a
+solution is presented to this issue as well as some computational improvements
+compared to Wang et al.'s scheme.\\
 \\
 Note however that although receivers being secret to unintended other users is
 desirable, it might be useful on a social network that the members of the set
@@ -672,7 +706,28 @@ of the broadcasting of $S$ in an encrypted form, are not known to the writers
 of this paper.
 
 \section{Conclusion}
-The conclusion goes here.
+Identity-Based Encryption (IBE) seems to have desirable properties for
+implementations increasing user defined privacy in OSNs. Mainly the minimal
+additional architectural support and the increased ease of use, are major
+motivations to implement IBE in Online Social Network (OSN) environments. Some
+disadvantages like a lack of key revocation and implicit key escrow are
+unpleasant but can be solved at the expense of increasing the complete system's
+complexity.\\
+\\
+Broadcast Encryption (BE) techniques can be used to optimise the required
+bandwidth and computational cost. Anonymous Broadcast Encryption (ANOBE)
+techniques even protect the identity of the authorised receivers.
+Anonymous Identity-Based Broadcast Encryption combines all desirable properties
+to a prefered architecture for IBE in OSNs although this still is a fast
+changing research domain.\\
+\\
+For a practical implementation of IBE on an OSN, Scramble could be rewritten
+that it supports Anonymous Identity-Based Broadcast Encryption on Facebook by
+using Facebook usernames as public keys. The key escrow property of IBE could
+be circumvented using a threshold secret sharing setup. The inability to revoke
+public keys could be compensated by appending a validity period to each public
+key in a standardised fashion such that the architecture implicitly knows when
+to issue new private/public key pairs.
 % if have a single appendix:
 %\appendix[Proof of the Zonklar Equations]
 % or
