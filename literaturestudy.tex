@@ -451,6 +451,40 @@ the same because of the property illustrated in Formula~\ref{eq:sym}.
 Furthermore Bob and the PKG are the only ones able to decrypt $Encrypt_{k}\left(
 M \right)$ as nobody else knows $s ID_{Bob}$.
 
+\subsection{Security Definitions}
+In all research concerning IBE, whether it is pure pairing based IBE or more
+complex broadcasting schemes, some definitions about an algorithm's level of
+security are always considered. Although most of these security definitions
+change depending on the considered algorithm, there are some general concepts
+that are similar.\\
+\\
+The security level of an algorihm is mostly defined based on an attackers game.
+The more actions an attacker is allowed to perform in this game without gaining
+any advantage in trying to decrypt messages, the safer the algorithm. Although
+this is very roughly stated, it is a concept that is encountered frequently in
+literature.\\
+\\
+In IBE there are mainly two accepted definitions of security:
+\begin{enumerate}
+ \item \textit{Full security} which means the attacker can choose adaptively the
+identity he wants to attack after having seen the parameters of the algorithm.
+ \item \textit{Selective-ID security} which means that the attacker must choose
+the identity he wants to attack at the beginning, before seeing the paramters.
+\end{enumerate}
+As the attacker is more restricted in its actions in Selective-ID security it
+is considered less secure.~\cite{DelerableeIBBE}\\
+\\
+Another notion that frequently appears in literature covering IBE is the concept
+of \textit{random oracles}. A random oracle is a black box that responds to
+every unique query with a (truly) random response chosen uniformly from its
+output domain, except that for any specific query, it responds the same way
+every time it receives that query. Very often, random oracles are used in
+security proofs to model true randomness. In reality these oracles are often
+implemented by hash functions. Therefore proving security based on true random
+oracles is easier than proving the actual implementation of an algorithm to be
+secure. However, an application that does not require random oracle heuristics
+is considered to be safer.~\cite{WikiOracle}
+
 \subsection{Advantages of IBE}
 As already mentioned in Section~\ref{sec:ibe} one of the most attractive
 properties of IBE is the recipient that does not have to have taken any action
@@ -557,8 +591,85 @@ reach using an URL. This property also makes them easier to remember.
 
 
 \subsection{IBE Broadcasting}
+\textit{Broadcast Encryption (BE)} techniques ensure confidentiality when
+sending a message to an arbitrary subset drawn from a universe of users. The
+universe of users is usually called $U$ and the set of targeted users is
+denoted with $S$ such that $S \subseteq U$. The concept of Broadcast Encryption
+was originally introduced by Fiat and Naor~\cite{FiatBE} in
+1993~\cite{LibertANOBE}. A BE scheme is said to be \textit{fully collusion
+resistant} when, even if all users that are not in $S$ collude, they can by no
+means infer information about the broadcast message.~\cite{DelerableeIBBE} \\
+\\
+If one wants to encrypt the same message $M$ for a large set of identities, one
+can simply encrypt $M$ seperateley for each individual identity and then
+transmit these encrypted messages separately. If the cardinality of the set of
+targeted identities is $|S|$, then one has to perform $|S|$ independent
+encryptions. Of course such a solution would be too expensive in terms of
+bandwith requirement as well as pairing computation. Baek, Safavi-Naini and
+Susilo in~\cite{BaekIBEandBE} addressed this problem for the first time in
+literature. They call their protocol \textit{Multi Receiver Identity-Based
+Encryption (MR-IBE)} and base it on the Boneh-Franklin IBE using bilinear
+pairings. In their paper, Baek et al. prove MR-IBE to be secure in the
+selective-ID model using the random oracle heuristic. Independent of this work,
+Barbosa and Farshim~\cite{BarbosaIBEKEM} proposed an identity-based key
+encapsulation scheme for multiple parties which is an extension of \textit{mKEM}
+as proposed by Smart~\cite{SmartMKEM} to the identity-based
+setting. An mKEM is a Key Encapsulation Mechanism which takes multiple public
+keys as input. An encrypted message under mKEM consists of an encapsulated
+session key $K$ and a symmetric encryption of the plaintext message $M$ under
+$K$. In this way only the encapsulation of the key uses computation intensive
+public key encryption~\cite{SmartMKEM}. Barbosa and Farshim prove their
+algorithm to be secure under random oracle assumptions. Later
+constructions based on the Boneh-Boyen (H)IBE~\cite{ChatterjeeHIBE} even show
+security without using the random oracle heurstic.
+~\cite{ChatterjeeShortenedCiphertext}\\
+\\
+The first proposals for these indentity-based broadcasting schemes had some
+undesirable properties like public key lengths being determined by the total
+number of possible users $|U|$. Lots of research optimising
+identity-based broadcasting schemes has been done since then to improve on the
+efficiency and usability of the original proposals. Delerabl\'ee introduces an
+Identity Based Broadcast Encryption scheme with constant sized ciphertext and
+private keys and a public key that is linear in the maximal number of
+receivers $|S|$. This is an improvement on earlier defined
+architectures as the maximum number of users is no longer fixed by the public
+key length. These improvements are realised by using broadcast KEM-DEM
+techniques. However, it is required in this architecture that the targeted set
+of receivers $S$ is broadcasted to all users as well thereby leaking a lot of
+information.~\cite{DelerableeIBBE}
 
-\subsection{}
+\subsection{Anonymous Broadcast Encryption}
+It is maybe useful to take one step back and think about the consequences of
+all intended receivers being published in plain text together with the encrypted
+message on a Social Network. If for example Bob's girlfriend celebrates her
+birthday in a few weeks and he spreads an encrypted message to all her friends
+without including her as a recipient, she will probably know Bob is up to
+something. This is just one example of possible many that illustrates the
+negative impact on security the broadcasting of $S$ can have in real life
+situations. Depending on the context, information can be deduced about a
+status update without decrypting the update to plain text.\\
+\\
+Broadcast encryption schemes that do not leak information about the intended
+recipients are called \textit{Anonymous Broadcasting Encryption (ANOBE)}
+schemes.~\cite{LibertANOBE} As these systems do not profit from $S$ being known
+to every user upfront they are a lot less efficient than non-anonymous BE
+schemes. Thus there clearly is a tradeoff between secrecy and efficiency in
+ID-based Broadcasting architectures.\\
+\\
+Note however that although receivers being secret to unintended other users is
+desirable, it might be useful on a social network that the members of the set
+$S$ know each other. Suppose for example that Alice posts a Facebook update on
+her profile page intended to Bob and Dylan. This means that $Bob, Dylan \in S$.
+As a reaction to Alice's Facebook update, Bob wants to write a reply to start a
+discussion. However, as Bob does not know which other users are allowed to see
+Alice's update, he can now only encrypt his reply to Alice thereby preventing
+Dylan from joining the discussion. However, this discussion could have been
+useful to Dylan as well because otherwise Alice would not have included Dylan
+as a recipient in $S$ in the first place. A workaround for this issue could be
+to concatenate $S$ to the plaintext message $M$ such that $M || S$ is encrypted
+instead of $M$. Currently possible algorithms taking a computational advantage
+of the broadcasting of $S$ in an encrypted form, are not known to the writers
+of this paper.
 
 \section{Conclusion}
 The conclusion goes here.
